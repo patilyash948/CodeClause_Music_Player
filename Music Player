@@ -1,0 +1,48 @@
+import tkinter as tk
+import pygame
+import os
+
+def play_music():
+    pygame.mixer.music.load(selected_song.get())
+    pygame.mixer.music.play()
+
+def stop_music():
+    pygame.mixer.music.stop()
+
+def load_songs():
+    song_listbox.delete(0, tk.END)
+    for file in os.listdir():
+        if file.endswith(".mp3"):
+            song_listbox.insert(tk.END, file)
+
+# Initialize Pygame mixer
+pygame.mixer.init()
+
+# Create the main window
+window = tk.Tk()
+window.title("Music Player")
+
+# Create a listbox to display the songs
+song_listbox = tk.Listbox(window, width=50)
+song_listbox.pack(pady=10)
+
+# Load songs from the current directory
+load_songs()
+
+# Create play and stop buttons
+play_button = tk.Button(window, text="Play", command=play_music)
+play_button.pack(pady=5)
+
+stop_button = tk.Button(window, text="Stop", command=stop_music)
+stop_button.pack(pady=5)
+
+# Variable to store the selected song
+selected_song = tk.StringVar()
+
+def select_song(event):
+    selected_song.set(song_listbox.get(song_listbox.curselection()))
+
+song_listbox.bind("<<ListboxSelect>>", select_song)
+
+# Start the main loop
+window.mainloop()
